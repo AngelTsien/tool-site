@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Markdown 预览 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>Markdown 预览</h1></header><main><div class=panel><div class=row style="align-items:stretch"><textarea id=t style="flex:1;min-width:260px;min-height:320px;font-family:monospace"># 主日聚会
+## 程序
+1. 敬拜赞美
+2. 读经：**尼希米记 1章**
+3. 讲道
+- 祷告
+- 报告
+> 你们要彼此相爱
+
+`代码`，[链接](https://example.com)</textarea><div id=o style="flex:1;min-width:260px;background:#fffdf9;border-radius:12px;padding:12px;border:1px solid #f0e8e0"></div></div><p><button class=alt id=cp>复制 HTML</button></p></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="markdown");r.unshift("markdown");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const es=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;"),il=s=>es(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\*(.+?)\*/g,"<i>$1</i>").replace(/`(.+?)`/g,"<code style='background:#f3ece2;padding:1px 4px;border-radius:4px'>$1</code>").replace(/\[(.+?)\]\((https?:[^)]+)\)/g,"<a href='$2' target=_blank>$1</a>");
+const md=s=>{let h="",l=null;const cl=()=>{if(l){h+=`</${l}>`;l=null}};s.split("\n").forEach(x=>{let m;if(m=x.match(/^(#{1,6})\s+(.*)/)){cl();h+=`<h${m[1].length}>${il(m[2])}</h${m[1].length}>`}else if(m=x.match(/^\s*[-*]\s+(.*)/)){if(l!="ul"){cl();h+="<ul>";l="ul"}h+=`<li>${il(m[1])}</li>`}
+else if(m=x.match(/^\s*\d+\.\s+(.*)/)){if(l!="ol"){cl();h+="<ol>";l="ol"}h+=`<li>${il(m[1])}</li>`}else if(m=x.match(/^>\s?(.*)/)){cl();h+=`<blockquote style="border-left:4px solid #d9a47c;margin:6px 0;padding:4px 12px;color:#6a5e56">${il(m[1])}</blockquote>`}else if(/^---+$/.test(x)){cl();h+="<hr>"}else if(x.trim()){cl();h+=`<p>${il(x)}</p>`}else cl()});cl();return h};
+const f=()=>o.innerHTML=md(t.value);t.oninput=f;cp.onclick=()=>navigator.clipboard.writeText(o.innerHTML);f()</script></html>

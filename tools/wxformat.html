@@ -1,0 +1,22 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>公众号排版 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>公众号排版</h1></header><main><div class=panel><div class=row><select id=th><option value="#d9a47c">暖棕</option><option value="#07c160">微信绿</option><option value="#3a6ea5">蓝</option><option value="#c46a8a">玫瑰</option><option value="#7a5aa5">紫</option></select><select id=fs><option value=15>15px</option><option value=16 selected>16px</option><option value=17>17px</option></select><button id=cp>📋 复制到公众号</button><span id=msg style="color:#4a9a5a"></span></div><p style="font-size:13px;color:#a99">左边用 Markdown 写，右边是手机预览；复制后直接粘贴到公众号编辑器，样式会保留</p></div>
+<div class=row style="align-items:flex-start"><textarea id=t style="flex:1;min-width:280px;min-height:460px;font-family:monospace;font-size:14px"># 堵住破口
+> 我在他们中间寻找一人重修墙垣，在我面前为这国站在破口防堵。——以西结书 22:30
+
+## 一、拒绝安逸 心系神家
+尼希米身在**波斯王宫**，却为耶路撒冷的城墙哭泣。
+
+- 不甘于现状
+- 改变的行动
+- 破坏的源头
+
+## 二、传递异象 共同参与
+1. 共同的使命
+2. 不留下空隙
+
+---
+*愿主祝福你的一周* 🙏</textarea><div style="width:375px;max-width:100%;border:10px solid #333;border-radius:30px;background:#fff;height:520px;overflow:auto"><div id=o style="padding:16px"></div></div></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="wxformat");r.unshift("wxformat");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const es=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");const md=(s,c,f)=>{const il=x=>es(x).replace(/\*\*(.+?)\*\*/g,`<strong style="color:${c}">$1</strong>`).replace(/\*(.+?)\*/g,"<em>$1</em>").replace(/`(.+?)`/g,`<code style="background:#f6f2ee;padding:2px 4px;border-radius:3px;color:${c}">$1</code>`);let h="",l=null;const cl=()=>{if(l){h+=`</${l}>`;l=null}};
+const P=`margin:0 0 16px;line-height:1.85;font-size:${f}px;color:#3f3f3f;letter-spacing:.5px`;s.split("\n").forEach(x=>{let m;if(m=x.match(/^# (.*)/)){cl();h+=`<h1 style="text-align:center;font-size:${f+6}px;color:${c};margin:10px 0 20px;font-weight:bold">${il(m[1])}</h1>`}
+else if(m=x.match(/^## (.*)/)){cl();h+=`<h2 style="font-size:${f+2}px;margin:28px 0 14px;padding:6px 12px;border-left:4px solid ${c};background:${c}18;color:#333;font-weight:bold">${il(m[1])}</h2>`}else if(m=x.match(/^### (.*)/)){cl();h+=`<h3 style="font-size:${f+1}px;color:${c};margin:20px 0 10px">${il(m[1])}</h3>`}
+else if(m=x.match(/^> ?(.*)/)){cl();h+=`<blockquote style="margin:0 0 16px;padding:12px 16px;background:#f7f7f7;border-left:3px solid ${c};color:#666;font-size:${f-1}px;line-height:1.75;border-radius:4px">${il(m[1])}</blockquote>`}else if(m=x.match(/^[-*] (.*)/)){if(l!="ul"){cl();h+=`<ul style="margin:0 0 16px;padding-left:22px;color:#3f3f3f;font-size:${f}px;line-height:1.85">`;l="ul"}h+=`<li>${il(m[1])}</li>`}
+else if(m=x.match(/^\d+\. (.*)/)){if(l!="ol"){cl();h+=`<ol style="margin:0 0 16px;padding-left:22px;color:#3f3f3f;font-size:${f}px;line-height:1.85">`;l="ol"}h+=`<li>${il(m[1])}</li>`}else if(/^---+$/.test(x)){cl();h+=`<hr style="border:none;height:1px;background:linear-gradient(90deg,transparent,${c},transparent);margin:24px 0">`}else if(x.trim()){cl();h+=`<p style="${P}">${il(x)}</p>`}else cl()});cl();return`<section style="font-family:-apple-system,'PingFang SC',sans-serif">${h}</section>`};
+const f=()=>o.innerHTML=md(t.value,th.value,+fs.value);[t,th,fs].forEach(e=>e.oninput=f);cp.onclick=async()=>{try{await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([o.innerHTML],{type:"text/html"}),"text/plain":new Blob([o.innerText],{type:"text/plain"})})]);msg.textContent="✓ 已复制，去公众号粘贴吧"}catch(e){const r=document.createRange();r.selectNodeContents(o);const s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");s.removeAllRanges();msg.textContent="✓ 已复制"}};f()</script></html>

@@ -1,0 +1,17 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>歌词投影 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>歌词投影</h1></header><main><div class=panel><label>歌名</label><input id=ti value="奇异恩典" style="width:100%"><label>歌词（空行分页；一页太长会按行数自动拆分）</label><textarea id=t style="min-height:200px">奇异恩典 何等甘甜
+我罪已得赦免
+前我失丧 今被寻回
+瞎眼今得看见
+
+如此恩典 使我敬畏
+使我心得安慰
+初信之时 即蒙恩惠
+真是何等宝贵</textarea>
+<div class=row><label>每页最多行</label><input id=mx type=number value=4 style="width:70px"><label>字号</label><input type=range id=fs min=4 max=12 value=7><select id=th><option value="#111,#fff">黑底白字</option><option value="#fff,#222">白底黑字</option><option value="#1e2a44,#f6e7c8">深蓝暖字</option><option value="#2f3a2f,#f0f5e8">墨绿</option></select><button id=go>🖥️ 全屏投影</button><button class=alt id=sv>保存到歌单</button><select id=bk><option value="">— 我的歌单 —</option></select></div><p style="font-size:13px;color:#a99">投影时：→/空格/点击右侧 下一页，←/点击左侧 上一页，B 黑屏，Esc 退出</p></div><div class=panel><div id=pv class=grid></div></div>
+<div id=st style="display:none;position:fixed;inset:0;z-index:9;align-items:center;justify-content:center;text-align:center;flex-direction:column;cursor:none;transition:background .3s"><div id=sl style="line-height:1.6;font-weight:600;transition:opacity .25s;padding:4vw"></div><div id=ft style="position:fixed;bottom:2vh;right:3vw;font-size:2vw;opacity:.4"></div></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="lyrics");r.unshift("lyrics");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>let Pg=[],i=0,blk=false;let BK=JSON.parse(localStorage.lyrbk||"{}");const bko=()=>{bk.innerHTML='<option value="">— 我的歌单 —</option>'+Object.keys(BK).map(k=>`<option>${k}</option>`).join("")};
+const pages=()=>{Pg=[];t.value.split(/\n\s*\n/).forEach(b=>{const L=b.split("\n").filter(x=>x.trim());for(let k=0;k<L.length;k+=+mx.value)Pg.push(L.slice(k,k+ +mx.value))});pv.innerHTML=Pg.map((p,k)=>`<div class=card style="font-size:13px;cursor:pointer" onclick="go0(${k})"><b>${k+1}</b><br>${p.join("<br>")}</div>`).join("")};
+const show=()=>{const[bg,fg]=th.value.split(",");st.style.background=bg;st.style.color=fg;sl.style.fontSize=fs.value*.6+"vw";sl.style.opacity=0;setTimeout(()=>{sl.innerHTML=blk?"":Pg[i].join("<br>");sl.style.opacity=1},150);ft.textContent=blk?"":`${ti.value}  ${i+1}/${Pg.length}`};
+window.go0=k=>{pages();i=k||0;blk=false;st.style.display="flex";st.requestFullscreen?.().catch(()=>{});show()};const ex=()=>{st.style.display="none";document.fullscreenElement&&document.exitFullscreen()};
+const mv=d=>{i=Math.max(0,Math.min(Pg.length-1,i+d));blk=false;show()};st.onclick=e=>mv(e.clientX>innerWidth/3?1:-1);
+onkeydown=e=>{if(st.style.display=="none")return;if(["ArrowRight","ArrowDown"," ","PageDown"].includes(e.key)){e.preventDefault();mv(1)}if(["ArrowLeft","ArrowUp","PageUp"].includes(e.key))mv(-1);if(e.key=="b"||e.key=="B"){blk=!blk;show()}if(e.key=="Escape")ex()};
+go.onclick=()=>go0(0);[t,mx].forEach(e=>e.oninput=pages);sv.onclick=()=>{BK[ti.value]=t.value;localStorage.lyrbk=JSON.stringify(BK);bko();bk.value=ti.value};bk.onchange=()=>{if(bk.value){ti.value=bk.value;t.value=BK[bk.value];pages()}};bko();pages();window.__i=()=>[i,Pg.length,sl.innerText]</script></html>

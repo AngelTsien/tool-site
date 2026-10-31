@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文本整理 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>文本整理</h1></header><main><div class=panel><textarea id=t style="min-height:160px">banana
+Apple
+cherry
+apple
+banana
+
+Date</textarea><div class=row style="margin-top:8px" id=bs></div><label><input type=checkbox id=ic checked> 去重/排序时忽略大小写</label><p id=info style="color:#a99"></p></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="textops");r.unshift("textops");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const L=()=>t.value.split("\n"),S=a=>{t.value=a.join("\n");info.textContent=`共 ${a.length} 行`},key=s=>ic.checked?s.toLowerCase():s;const O={"去重":a=>{const s=new Set;return a.filter(x=>!s.has(key(x))&&s.add(key(x)))},"排序 A→Z":a=>[...a].sort((x,y)=>key(x).localeCompare(key(y),"zh")),"排序 Z→A":a=>[...a].sort((x,y)=>key(y).localeCompare(key(x),"zh")),
+"按长度":a=>[...a].sort((x,y)=>x.length-y.length),"倒序":a=>[...a].reverse(),"打乱":a=>[...a].sort(()=>Math.random()-.5),"去空行":a=>a.filter(x=>x.trim()),"去首尾空格":a=>a.map(x=>x.trim()),"加编号":a=>a.map((x,i)=>`${i+1}. ${x}`),"去编号":a=>a.map(x=>x.replace(/^\s*\d+[.、)]\s*/,"")),
+"全大写":a=>a.map(x=>x.toUpperCase()),"全小写":a=>a.map(x=>x.toLowerCase()),"首字母大写":a=>a.map(x=>x.replace(/\b\w/g,c=>c.toUpperCase())),"合并为一行":a=>[a.filter(x=>x.trim()).join("，")],"按标点拆行":a=>a.join("\n").split(/[,，;；、\n]+/).map(x=>x.trim()).filter(Boolean)};
+Object.keys(O).forEach(k=>{const b=document.createElement("button");b.className="alt";b.textContent=k;b.onclick=()=>S(O[k](L()));bs.appendChild(b)});const c=document.createElement("button");c.textContent="复制";c.onclick=()=>navigator.clipboard.writeText(t.value);bs.appendChild(c);window.__O=O</script></html>

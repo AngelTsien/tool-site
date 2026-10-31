@@ -1,0 +1,13 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文本对比 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>文本对比</h1></header><main><div class=panel><div class=row style="align-items:stretch"><textarea id=a style="flex:1;min-width:240px;min-height:160px">起初神创造天地。
+地是空虚混沌，渊面黑暗；
+神的灵运行在水面上。
+神说：要有光。</textarea><textarea id=b style="flex:1;min-width:240px;min-height:160px">起初，神创造天地。
+地是空虚混沌，渊面黑暗；
+神的灵运行在水面上。
+神说：要有光，就有了光。
+神看光是好的。</textarea></div><div class=row><label><input type=checkbox id=ws> 忽略空格</label><span id=sm style="color:#7a706a"></span></div></div><div class=panel><div id=o style="font-family:ui-monospace,monospace;font-size:14px;line-height:1.7;overflow:auto"></div></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="diff");r.unshift("diff");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const lcs=(A,B,eq)=>{const n=A.length,m=B.length,d=Array.from({length:n+1},()=>new Uint16Array(m+1));for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)d[i][j]=eq(A[i],B[j])?d[i+1][j+1]+1:Math.max(d[i+1][j],d[i][j+1]);const r=[];let i=0,j=0;
+while(i<n&&j<m){if(eq(A[i],B[j])){r.push(["=",A[i],B[j]]);i++;j++}else if(d[i+1][j]>=d[i][j+1])r.push(["-",A[i++]]);else r.push(["+",null,B[j++]])}while(i<n)r.push(["-",A[i++]]);while(j<m)r.push(["+",null,B[j++]]);return r};
+const es=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");const f=()=>{const nz=s=>ws.checked?s.replace(/\s+/g,""):s,R=lcs(a.value.split("\n"),b.value.split("\n"),(x,y)=>nz(x)==nz(y));let h="",ad=0,dl=0,ch=0;
+for(let k=0;k<R.length;k++){const[t,x,y]=R[k];if(t=="="){h+=`<div style="color:#7a706a">&nbsp; ${es(y)}</div>`;continue}if(t=="-"&&R[k+1]&&R[k+1][0]=="+"){ch++;const y2=R[++k][2],C=lcs([...x],[...y2],(p,q)=>p==q);
+h+=`<div style="background:#fbe9e5">− ${C.map(([tt,p])=>tt=="-"?`<del style="background:#f5b5a8">${es(p)}</del>`:tt=="="?es(p):"").join("")}</div><div style="background:#e7f3ea">+ ${C.map(([tt,p,q])=>tt=="+"?`<ins style="background:#a9dbb5;text-decoration:none">${es(q)}</ins>`:tt=="="?es(q):"").join("")}</div>`}
+else if(t=="-"){dl++;h+=`<div style="background:#fbe9e5">− ${es(x)}</div>`}else{ad++;h+=`<div style="background:#e7f3ea">+ ${es(y)}</div>`}}o.innerHTML=h;sm.textContent=`新增 ${ad} 行 · 删除 ${dl} 行 · 修改 ${ch} 行`};[a,b,ws].forEach(e=>e.oninput=f);f()</script></html>

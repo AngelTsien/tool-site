@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>讲道大纲排版 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>讲道大纲排版</h1></header><main><div class=panel><label>标题 / 经文</label><div class=row><input id=ti value="堵住破口" style="flex:1"><input id=sc value="尼希米记" style="flex:1"></div>
+<label>大纲（"一、" "1." 开头为大点/小点，"- " 开头为说明，"> " 开头为经文）</label><textarea id=t style="min-height:200px">一、拒绝安逸 心系神家
+1. 不甘于现状
+> 尼1:4 我听见这话，就坐下哭泣，悲哀几日，在天上的神面前禁食祈祷。
+- 尼希米不因身居高位而忘记耶路撒冷
+二、传递异象 共同参与
+1. 共同的使命
+2. 不留下空隙</textarea><p class=row><button onclick="print()">打印 / 存 PDF</button></p></div><div class=panel id=o style="font-family:'Songti SC','Noto Serif CJK SC',serif;line-height:1.8"></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="outline");r.unshift("outline");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const f=()=>{let h=`<h1 style="text-align:center;margin:0">${ti.value}</h1><p style="text-align:center;color:#8a7a6a">经文：${sc.value}</p>`;t.value.split("\n").forEach(l=>{l=l.trim();if(!l)return;
+if(/^[一二三四五六七八九十]+[、.]/.test(l))h+=`<h2 style="color:#a0704a;border-bottom:2px solid #f0e0d0;margin-top:22px">${l}</h2>`;else if(/^\d+[.、]/.test(l))h+=`<h3 style="margin:12px 0 4px 12px">${l}</h3>`;
+else if(l[0]==">")h+=`<blockquote style="margin:6px 24px;padding:8px 14px;background:#faf3ea;border-left:4px solid #d9a47c;border-radius:6px">${l.slice(1).trim()}</blockquote>`;else h+=`<p style="margin:4px 28px">• ${l.replace(/^-\s*/,"")}</p>`});o.innerHTML=h};[t,ti,sc].forEach(e=>e.oninput=f);f()</script></html>

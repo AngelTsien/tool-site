@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>祝福语生成 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>祝福语生成</h1></header><main><div class=panel><div class=row><select id=oc></select><input id=to placeholder="对方称呼（可选）" value="王阿姨"><input id=fr placeholder="署名（可选）" value="Angel"><label><input type=checkbox id=fa checked> 信仰版</label></div></div><div id=ls></div></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="blessing");r.unshift("blessing");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const D={"🎄 圣诞节":[["愿以马内利的神与你同在，圣诞快乐，平安喜乐！","愿救主降生的喜乐充满你的家，圣诞蒙福！","在这个圣诞，愿基督的爱与光照亮你前面的每一步。"],["圣诞快乐！愿温暖与幸福常伴左右。","祝你圣诞快乐，新的一年万事如意！"]],
+"🧧 春节":[["新春蒙福！愿神赐你新的一年满有恩典与平安。","愿主在新的一年使你的福杯满溢，阖家安康！"],["新春快乐！祝你阖家幸福，万事如意，身体健康！","新年新气象，祝你龙马精神，事事顺心！"]],
+"🎂 生日":[["生日快乐！愿神的恩典够你用，祂的慈爱伴你每一天。","愿你在主里的生命如树栽在溪水旁，按时候结果子。生日蒙福！"],["生日快乐！愿你每天都开心，所愿皆所得！","祝你生日快乐，岁岁平安，年年有今日！"]],
+"💍 婚礼":[["愿神祝福你们的婚姻，三股合成的绳子不容易折断。新婚快乐！","愿你们彼此相爱，如同基督爱教会。百年好合，主恩满满！"],["新婚快乐！祝你们百年好合，永结同心！","愿你们执子之手，与子偕老，幸福美满！"]],
+"🌅 复活节":[["主已复活！愿复活的大能与盼望充满你。复活节快乐！","因祂活着，我们能面对明天。复活节蒙福！"],["复活节快乐，愿春天的希望常在你心！"]],
+"🍂 感恩节":[["凡事谢恩！感谢神让我们彼此相遇，感恩节快乐！","愿你数算主恩，感恩节满有喜乐！"],["感恩节快乐，感谢有你一路相伴！"]],
+"🕯️ 慰问":[["愿赐各样安慰的神亲自安慰你，我们与你同在，也为你祷告。","主必擦去一切的眼泪。为你和家人祷告，愿你得着从神来的平安。"],["请节哀顺变，有需要随时找我，愿你一切安好。"]],
+"🌱 康复":[["为你祷告，愿耶和华拉法医治你的神使你早日康复！","愿主的手托住你，赐你力量与平安，早日痊愈！"],["祝你早日康复，身体健康！"]],
+"🎓 毕业/升学":[["恭喜毕业！愿神引领你前面的道路，凡事都能荣耀祂。","人心筹算自己的道路，惟耶和华指引他的脚步。祝前程蒙福！"],["恭喜毕业，祝前程似锦，未来可期！"]]};
+Object.keys(D).forEach(k=>oc.add(new Option(k)));const f=()=>{const L=D[oc.value][fa.checked?0:1],h=to.value?to.value+"：\n":"",e=fr.value?"\n—— "+fr.value:"";ls.innerHTML=L.map(x=>{const s=h+x+e;return`<div class=panel><p style="white-space:pre-wrap;font-size:17px;line-height:1.7">${s}</p><button class=alt onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);this.textContent='✓ 已复制'">📋 复制</button></div>`}).join("")};[oc,to,fr,fa].forEach(e=>e.oninput=e.onchange=f);f()</script></html>

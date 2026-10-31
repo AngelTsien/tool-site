@@ -1,0 +1,21 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>主日周报 · 小工具站</title><link rel="stylesheet" href="../static/style.css"><header><a href="../index.html">← 小工具站</a><h1>主日周报</h1></header><main><div class=panel id=fm><div class=row><input id=ch value="恩典基督教会" style="flex:1"><input type=date id=dt></div><label>主题 / 经文</label><div class=row><input id=th value="堵住破口" style="flex:1"><input id=sc value="尼希米记 1–6 章" style="flex:1"></div>
+<label>聚会程序（每行：项目 | 负责人）</label><textarea id=pg style="min-height:130px">宣召 | 王弟兄
+诗歌敬拜 | 敬拜团
+读经 | 李姊妹
+证道 | Angel
+回应诗歌 | 会众
+奉献 | 
+报告 | 陈执事
+祝福 | 牧师</textarea><label>教会报告（每行一条）</label><textarea id=an style="min-height:90px">下主日圣餐，请预备心
+周三晚 7:30 祷告会
+青年团契周六下午 3 点
+欢迎新朋友会后留步用茶点</textarea><label>代祷事项（每行一条）</label><textarea id=pr style="min-height:60px">为病中的肢体代祷
+为福音工作代祷</textarea>
+<div class=row><label>下周服事</label><input id=nx value="领会：张弟兄 · 司琴：小红 · 招待：小华" style="flex:1"></div><div class=row style="margin-top:8px"><select id=ly><option value=1>单页</option><option value=2>A4 横向对折</option></select><button onclick="print()">🖨 打印 / PDF</button></div></div>
+<div id=out style="background:#fff;max-width:800px;margin:auto;padding:28px;border-radius:12px;box-shadow:0 4px 18px #0001;font-family:'Songti SC','Noto Serif CJK SC',serif"></div><style>@media print{header,footer,#fm{display:none}main{padding:0}#out{box-shadow:none;max-width:none}}</style></main><footer>所有处理都在你的浏览器里完成</footer><script>try{let r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="bulletin");r.unshift("bulletin");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script><script>const d0=new Date();d0.setDate(d0.getDate()+(7-d0.getDay())%7);dt.valueAsDate=d0;const L=s=>s.split("\n").map(x=>x.trim()).filter(Boolean);
+const f=()=>{const d=new Date(dt.value),h2=s=>`<h3 style="color:#a0704a;border-bottom:2px solid #f0e0d0;padding-bottom:4px;margin:18px 0 8px">${s}</h3>`;
+const A=`<div style="text-align:center"><div style="font-size:13px;letter-spacing:4px;color:#8a7a6a">SUNDAY BULLETIN</div><h1 style="margin:6px 0">${ch.value}</h1><div style="color:#8a7a6a">${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日 · 主日崇拜</div>
+<div style="margin:18px auto;padding:14px;border-radius:12px;background:linear-gradient(135deg,#faf0e4,#eef3ea);max-width:420px"><div style="font-size:24px;font-weight:700">${th.value}</div><div style="color:#7a6a5a">${sc.value}</div></div></div>`+h2("✝ 聚会程序")+
+`<table style="width:100%">${L(pg.value).map(l=>{const[a,b]=l.split("|").map(s=>(s||"").trim());return`<tr><td style="padding:5px 0">${a}</td><td style="border-bottom:1px dotted #ccc;width:40%"></td><td style="text-align:right;padding:5px 0">${b||""}</td></tr>`}).join("")}</table>`;
+const B=h2("📢 教会报告")+`<ol style="padding-left:20px;line-height:1.8">${L(an.value).map(x=>`<li>${x}</li>`).join("")}</ol>`+h2("🙏 代祷事项")+`<ul style="line-height:1.8">${L(pr.value).map(x=>`<li>${x}</li>`).join("")}</ul>`+h2("📋 下周服事")+`<p>${nx.value}</p><p style="text-align:center;color:#a99;margin-top:24px;font-size:13px">“你们要彼此相爱”——约翰福音 13:34</p>`;
+out.innerHTML=ly.value=="2"?`<div style="display:flex;gap:30px"><div style="flex:1">${A}</div><div style="flex:1;border-left:1px dashed #ddd;padding-left:24px">${B}</div></div>`:A+B};document.querySelectorAll("#fm input,#fm textarea,#fm select").forEach(e=>e.oninput=f);f()</script></html>
