@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>投影窗口 · 歌词投影</title>
+<link rel="stylesheet" href="css/stage.css">
+<style>
+html,body{margin:0;height:100%;background:#000;overflow:hidden;cursor:none}
+#stage{position:fixed;inset:0}
+#hint{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);color:#888;font:16px system-ui,sans-serif;text-align:center;line-height:1.8;cursor:default;transition:opacity .5s}
+#hint b{color:#ddd}
+</style></head>
+<body>
+<div id="stage" class="lp-stage"></div>
+<div id="hint">投影窗口已打开<br>把本窗口拖到投影仪/电视屏幕，然后 <b>双击</b> 或按 <b>F</b> 全屏<br>翻页：空格 / → / ↓ / 翻页笔 · B 黑屏 · L 标志页</div>
+<script src="js/core.js"></script>
+<script>
+(function(){
+  const stage = document.getElementById('stage'), hint = document.getElementById('hint');
+  let last = null, prompterEl = null;
+  const ch = LP.channel(m => {
+    if (m.type === 'state') { apply(m.data); }
+    else if (m.type === 'prompter-pos' && prompterEl) setPos(m.data.pos);
+  });
+  function setPos(p){ const max = prompterEl.scrollHeight - prompterEl.clientHeight; prompterEl.scrollTop = Math.max(0, p * max); }
+  function apply(st){
+    last = st; hint.style.opacity = 0; setTimeout(()=>hint.remove(), 600);
+    if (st.mode === 'prompter') {
+      const p = st.prompter; const t = LP.theme(st.theme);
+      stage.innerHTML = ''; stage.style.background = p.bg || '#000';
+      prompterEl = document.createElement('div'); prompterEl.className = 'lp-prompter' + (p.mirror ? ' mirror' : '');
+      const inner = document.createElement('div'); inner.className = 'lp-prompter-inner'; inner.textContent = p.text;
+      Object.assign(inner.style, { fontSize: p.fontSize + 'cqh', color: p.color || '#fff', fontFamily: LP.FONTS[t.font] });
+      prompterEl.appendChild(inner); stage.appendChild(prompterEl);
+      const mk = document.createElement('div'); mk.className = 'lp-prompter-mark'; stage.appendChild(mk);
+      setPos(p.pos || 0); return;
+    }
+    prompterEl = null;
+    LP.renderStage(stage, st, st.theme, st.logo);
+  }
+  window.addEventListener('resize', () => last && apply(last));
+  function fs(){ if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen(); }
+  document.addEventListener('dblclick', fs);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'f' || e.key === 'F') { fs(); return; }
+    const keys = [' ', 'ArrowRight','ArrowLeft','ArrowUp','ArrowDown','PageUp','PageDown','Home','End','b','B','l','L','.','Escape'];
+    if (keys.includes(e.key)) { e.preventDefault(); ch.send('key', { key: e.key }); }
+  });
+  ch.send('hello', {});
+})();
+</script>
+</body></html>

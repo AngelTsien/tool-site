@@ -1,0 +1,13 @@
+.lp-stage{position:relative;overflow:hidden;container-type:size;background:#000;color:#fff}
+.lp-text{position:absolute;inset:0;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;word-break:break-word}
+.lp-lines{max-width:100%}
+.lp-line{white-space:pre-wrap;text-wrap:balance}
+.lp-line.sub{font-weight:500}
+.lp-ref{margin-top:.6em}
+.lp-logo{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqh}
+.lp-logo img{max-width:55%;max-height:55%;object-fit:contain}
+.lp-logo-text{font-size:6cqh;font-weight:700;text-align:center}
+.lp-prompter{position:absolute;inset:0;overflow:hidden}
+.lp-prompter-inner{padding:50cqh 8cqw;box-sizing:border-box;white-space:pre-wrap;line-height:1.5;font-weight:600}
+.lp-prompter.mirror .lp-prompter-inner{transform:scaleX(-1)}
+.lp-prompter-mark{position:absolute;left:0;right:0;top:40%;height:0;border-top:2px dashed rgba(255,200,0,.5);pointer-events:none}

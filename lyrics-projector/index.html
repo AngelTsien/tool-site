@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歌词投影 · 控制台</title>
+<link rel="stylesheet" href="css/stage.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="top">
+  <a class="home" href="../index.html" title="回到小工具站">← 小工具站</a>
+  <div class="brand">🎵 歌词投影</div>
+  <nav id="tabs">
+    <button data-tab="live" class="active">▶ 现场</button>
+    <button data-tab="songs">🎼 歌曲库</button>
+    <button data-tab="sets">📋 歌单</button>
+    <button data-tab="prompter">📜 提词器</button>
+    <button data-tab="look">🎨 外观</button>
+    <button data-tab="settings">⚙ 设置/备份</button>
+  </nav>
+  <div class="top-actions">
+    <span id="projStatus" class="status off" title="投影窗口状态">● 投影未打开</span>
+    <button id="btnOpenProj" class="primary">🖥 打开投影窗口</button>
+  </div>
+</header>
+
+<main>
+<!-- 现场 -->
+<section id="tab-live" class="tab active">
+  <div class="live-grid">
+    <aside class="panel live-items">
+      <div class="row"><select id="liveSetSelect" title="选择要投影的歌单"></select></div>
+      <ol id="liveItems" class="item-list"></ol>
+      <p class="muted small">点歌名跳到这首歌第一页</p>
+    </aside>
+    <div class="live-main">
+      <div class="previews">
+        <div class="pv"><div class="pv-label">当前 <span id="curInfo" class="muted"></span></div><div id="pvCur" class="lp-stage pv-stage"></div></div>
+        <div class="pv next"><div class="pv-label">下一页 <span id="nextInfo" class="muted"></span></div><div id="pvNext" class="lp-stage pv-stage"></div></div>
+      </div>
+      <div class="live-controls">
+        <button id="btnPrev" title="上一页（← / ↑ / PageUp）">◀ 上一页</button>
+        <button id="btnNext" class="primary big" title="下一页（空格 / → / ↓ / PageDown）">下一页 ▶</button>
+        <button id="btnBlack" class="toggle" title="黑屏（B 或 .）">⬛ 黑屏 B</button>
+        <button id="btnLogo" class="toggle" title="标志页（L）">⛪ 标志 L</button>
+        <span class="muted small kbd-hint">空格/→ 下一页 · ← 上一页 · B 黑屏 · L 标志 · Home 第一页</span>
+      </div>
+      <div id="slideGrid" class="slide-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 歌曲库 -->
+<section id="tab-songs" class="tab">
+  <div class="two-col">
+    <aside class="panel">
+      <div class="row"><input id="songSearch" type="search" placeholder="🔍 搜索歌名或歌词…"><button id="btnNewSong" class="primary">＋ 新歌</button></div>
+      <div id="tagFilter" class="chips"></div>
+      <ul id="songList" class="song-list"></ul>
+    </aside>
+    <div class="panel editor">
+      <div class="row wrap">
+        <label class="grow">歌名<input id="sTitle" placeholder="例如：奇异恩典"></label>
+        <label>调号<input id="sKey" class="w6" placeholder="G"></label>
+        <label>速度<input id="sTempo" class="w6" placeholder="72 / 慢"></label>
+        <label>语言<select id="sLang"><option>中文</option><option>英文</option><option>中英</option><option>其他</option></select></label>
+      </div>
+      <label>分类标签（可多选，也可自己输入，用逗号分开）<input id="sTags" placeholder="赞美, 敬拜"></label>
+      <div id="tagQuick" class="chips small"></div>
+      <label>唱法顺序（可留空 = 按歌词顺序）<input id="sArr" placeholder="例如：主歌 副歌 主歌 副歌x2   或   V1 C V2 C C"></label>
+      <div class="lyrics-head">
+        <span>歌词 <span class="muted small">空一行 = 新的一页；用 [主歌] [副歌] [桥段] 或 V1: C: 标段落</span></span>
+        <span><button id="btnOcr">📷 照片识别歌词</button></span>
+      </div>
+      <textarea id="sLyrics" rows="14" spellcheck="false" placeholder="[主歌]&#10;第一行歌词&#10;第二行歌词&#10;&#10;[副歌]&#10;……"></textarea>
+      <div class="row wrap actions">
+        <button id="btnSaveSong" class="primary">💾 保存</button>
+        <button id="btnProjectSong">▶ 立即投影这首</button>
+        <button id="btnAddToSet">＋ 加入歌单…</button>
+        <button id="btnExportSongPptx">⬇ PPT</button>
+        <button id="btnExportSongPng">⬇ 图片</button>
+        <button id="btnDelSong" class="danger">🗑 删除</button>
+        <span id="songMsg" class="muted small"></span>
+      </div>
+      <div class="muted small" id="songUsage"></div>
+      <div id="songWarn" class="warn small"></div>
+      <div id="songPreview" class="slide-grid small-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 歌单 -->
+<section id="tab-sets" class="tab">
+  <div class="two-col">
+    <aside class="panel">
+      <div class="row"><button id="btnNewSet" class="primary">＋ 新歌单</button><button id="btnDupSet">⧉ 复制所选</button></div>
+      <ul id="setList" class="song-list"></ul>
+    </aside>
+    <div class="panel editor">
+      <div class="row wrap">
+        <label class="grow">歌单名称<input id="setName" placeholder="11月16日主日"></label>
+        <label>日期<input id="setDate" type="date"></label>
+      </div>
+      <ol id="setItems" class="set-items"></ol>
+      <div class="row wrap add-row">
+        <input id="addSongSearch" list="songDatalist" placeholder="输入歌名添加歌曲…"><datalist id="songDatalist"></datalist>
+        <button id="btnAddSongItem">＋ 加歌</button>
+        <button id="btnAddTextItem">＋ 经文 / 文字页</button>
+        <button id="btnAddLogoItem">＋ 标志页</button>
+      </div>
+      <div class="row wrap actions">
+        <button id="btnSaveSet" class="primary">💾 保存歌单</button>
+        <button id="btnStartSet" class="primary">▶ 开始投影</button>
+        <button id="btnExpPng">⬇ 图片 ZIP</button>
+        <button id="btnExpPptx">⬇ PPT</button>
+        <button id="btnExpPdf">⬇ PDF</button>
+        <button id="btnExpTxt">⬇ 歌单文字</button>
+        <button id="btnExpSetJson">⬇ 歌单文件</button>
+        <button id="btnDelSet" class="danger">🗑 删除</button>
+        <span id="setMsg" class="muted small"></span>
+      </div>
+      <div id="exportProgress" class="muted small"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 提词器 -->
+<section id="tab-prompter" class="tab">
+  <div class="two-col prompter-col">
+    <div class="panel">
+      <div class="row wrap">
+        <select id="pmSource"><option value="">从歌曲/歌单载入…</option></select>
+        <label class="chk"><input type="checkbox" id="pmToProj"> 显示到投影窗口</label>
+        <label class="chk"><input type="checkbox" id="pmMirror"> 镜像（反射式提词器）</label>
+      </div>
+      <textarea id="pmText" rows="16" placeholder="把讲稿、主持词或歌词贴在这里…"></textarea>
+      <div class="row wrap">
+        <label class="grow">速度 <input id="pmSpeed" type="range" min="5" max="200" value="40"><span id="pmSpeedV"></span></label>
+        <label class="grow">字号 <input id="pmSize" type="range" min="3" max="20" step="0.5" value="8"><span id="pmSizeV"></span></label>
+      </div>
+      <div class="row wrap">
+        <button id="pmPlay" class="primary big">▶ 开始滚动（空格）</button>
+        <button id="pmSlower">－ 慢</button><button id="pmFaster">＋ 快</button>
+        <button id="pmReset">⏮ 回到开头</button>
+        <span class="muted small">空格 暂停/继续 · ↑↓ 调速 · Home 回到开头</span>
+      </div>
+    </div>
+    <div class="panel"><div id="pmStage" class="lp-stage pm-stage"></div></div>
+  </div>
+</section>
+
+<!-- 外观 -->
+<section id="tab-look" class="tab">
+  <div class="two-col look-col">
+    <div class="panel">
+      <h3>预设主题</h3><div id="presets" class="chips"></div>
+      <h3>文字</h3>
+      <div class="form-grid">
+        <label>字体<select id="tFont"></select></label>
+        <label class="chk"><input type="checkbox" id="tBold"> 粗体</label>
+        <label>字号 <input id="tFontSize" type="range" min="3" max="16" step="0.5"><span data-v="tFontSize"></span></label>
+        <label>行距 <input id="tLineHeight" type="range" min="1" max="2.2" step="0.05"><span data-v="tLineHeight"></span></label>
+        <label>文字颜色<input id="tColor" type="color"></label>
+        <label>对齐<select id="tAlign"><option value="center">居中</option><option value="left">靠左</option><option value="right">靠右</option></select></label>
+        <label>垂直位置<select id="tValign"><option value="middle">中间</option><option value="top">上方</option><option value="bottom">下方（字幕）</option></select></label>
+        <label class="chk"><input type="checkbox" id="tShadow"> 文字阴影</label>
+        <label class="chk"><input type="checkbox" id="tOutline"> 文字描边</label>
+        <label>描边颜色<input id="tOutlineColor" type="color"></label>
+        <label class="chk"><input type="checkbox" id="tAutoFit"> 字太多自动缩小</label>
+        <label class="chk"><input type="checkbox" id="tShowRef"> 经文页显示出处</label>
+      </div>
+      <h3>双语</h3>
+      <div class="form-grid">
+        <label class="chk"><input type="checkbox" id="tBilingual"> 英文行用副标题样式</label>
+        <label>英文行颜色<input id="tSubColor" type="color"></label>
+        <label>英文行大小 <input id="tSubScale" type="range" min="0.4" max="1" step="0.02"><span data-v="tSubScale"></span></label>
+      </div>
+      <p class="muted small">中英对照：每行中文下面紧跟一行英文即可，英文行会自动变小并换颜色。</p>
+      <h3>背景</h3>
+      <div class="form-grid">
+        <label>类型<select id="tBgType"><option value="color">纯色</option><option value="gradient">渐变</option><option value="image">图片</option></select></label>
+        <label>颜色 1<input id="tBgColor" type="color"></label>
+        <label>颜色 2（渐变）<input id="tBgColor2" type="color"></label>
+        <label>背景图片<input id="tBgImageFile" type="file" accept="image/*"></label>
+        <label>图片变暗 <input id="tBgDim" type="range" min="0" max="0.85" step="0.05"><span data-v="tBgDim"></span></label>
+      </div>
+      <h3>标志页（按 L）</h3>
+      <div class="form-grid">
+        <label>教会标志图片<input id="logoFile" type="file" accept="image/*"></label>
+        <label>标志页文字<input id="logoText" placeholder="例如：欢迎来到 XX 华人教会"></label>
+        <button id="logoClear">清除标志图片</button>
+      </div>
+    </div>
+    <div class="panel sticky">
+      <div class="pv-label">效果预览</div>
+      <div id="lookStage" class="lp-stage pv-stage"></div>
+      <div id="lookLogoStage" class="lp-stage pv-stage" style="margin-top:10px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 设置 -->
+<section id="tab-settings" class="tab">
+  <div class="panel narrow">
+    <h3>分页</h3>
+    <div class="form-grid">
+      <label>每页最多行数（0 = 只按空行分页）<input id="optMaxLines" type="number" min="0" max="12" class="w6"></label>
+      <label class="chk"><input type="checkbox" id="optTitleSlide"> 每首歌前加一页歌名</label>
+    </div>
+    <h3>照片识别（OCR）</h3>
+    <div class="form-grid">
+      <label class="chk"><input type="checkbox" id="optAi"> 使用 AI 识别（更准，需要联网和 API Key）</label>
+      <label>接口地址（OpenAI 兼容）<input id="optAiUrl" placeholder="https://api.openai.com/v1/chat/completions"></label>
+      <label>模型<input id="optAiModel" placeholder="gpt-4o-mini"></label>
+      <label>API Key（只保存在本机浏览器）<input id="optAiKey" type="password" autocomplete="off"></label>
+    </div>
+    <h3>备份</h3>
+    <div class="row wrap">
+      <button id="btnBackup" class="primary">⬇ 导出全部数据（歌曲+歌单+外观）</button>
+      <label class="btnlike">⬆ 导入备份<input id="restoreFile" type="file" accept=".json,application/json" hidden></label>
+      <button id="btnImportSongs">⬆ 导入歌曲文本（.txt，可多选）</button><input id="importTxt" type="file" accept=".txt,text/plain" multiple hidden>
+      <button id="btnReset" class="danger">清空所有数据</button>
+    </div>
+    <p class="muted small">数据只保存在这台电脑的浏览器里（IndexedDB）。换电脑或清理浏览器前请先导出备份。</p>
+    <p class="muted small" id="storageInfo"></p>
+  </div>
+</section>
+</main>
+
+<!-- OCR 弹窗 -->
+<dialog id="ocrDlg">
+  <form method="dialog" class="dlg">
+    <h3>📷 照片 / 歌谱截图识别歌词</h3>
+    <div id="ocrDrop" class="drop">把歌词照片或简谱截图拖到这里，或 <label class="btnlike">选择图片<input id="ocrFile" type="file" accept="image/*" hidden></label>，也可以直接 Ctrl/⌘+V 粘贴截图</div>
+    <div class="row wrap">
+      <label>识别方式<select id="ocrMode"><option value="local">离线识别（免费）</option><option value="ai">AI 识别（需在设置里填 Key）</option></select></label>
+      <label>每页行数<select id="ocrLines"><option>2</option><option>3</option><option selected>4</option><option>6</option><option value="0">不自动分页</option></select></label>
+      <label class="chk"><input type="checkbox" id="ocrStrip" checked> 去掉简谱数字/和弦/杂符号</label>
+    </div>
+    <div id="ocrProgress" class="muted small"></div>
+    <div class="ocr-cols">
+      <img id="ocrImg" alt="">
+      <textarea id="ocrOut" rows="14" placeholder="识别结果会显示在这里，可以直接修改"></textarea>
+    </div>
+    <div class="row actions">
+      <button value="cancel">取消</button>
+      <button id="ocrAppend" value="append">追加到歌词</button>
+      <button id="ocrFill" value="fill" class="primary">替换歌词框</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="textDlg">
+  <form method="dialog" class="dlg">
+    <h3>经文 / 文字页</h3>
+    <label>标题或出处（例如：约翰福音 3:16）<input id="txtTitle"></label>
+    <label>内容（空一行 = 新的一页）<textarea id="txtBody" rows="10"></textarea></label>
+    <div class="row actions"><button value="cancel">取消</button><button value="ok" class="primary">确定</button></div>
+  </form>
+</dialog>
+
+<dialog id="pickSetDlg">
+  <form method="dialog" class="dlg">
+    <h3>加入哪个歌单？</h3>
+    <select id="pickSet"></select>
+    <div class="row actions"><button value="cancel">取消</button><button value="ok" class="primary">加入</button></div>
+  </form>
+</dialog>
+
+<div id="toast"></div>
+
+<script>try{const r=JSON.parse(localStorage.recent||"[]").filter(x=>x!="lyricspro");r.unshift("lyricspro");localStorage.recent=JSON.stringify(r.slice(0,6))}catch(e){}</script>
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/pptxgen.bundle.js"></script>
+<script src="vendor/tesseract/tesseract.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/db.js"></script>
+<script src="js/seed.js"></script>
+<script src="js/ocr.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+</body></html>
