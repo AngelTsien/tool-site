@@ -33,15 +33,17 @@
     </aside>
     <div class="live-main">
       <div class="previews">
-        <div class="pv"><div class="pv-label">当前 <span id="curInfo" class="muted"></span></div><div id="pvCur" class="lp-stage pv-stage"></div></div>
-        <div class="pv next"><div class="pv-label">下一页 <span id="nextInfo" class="muted"></span></div><div id="pvNext" class="lp-stage pv-stage"></div></div>
-      </div>
-      <div class="live-controls">
-        <button id="btnPrev" title="上一页（← / ↑ / PageUp）">◀ 上一页</button>
-        <button id="btnNext" class="primary big" title="下一页（空格 / → / ↓ / PageDown）">下一页 ▶</button>
-        <button id="btnBlack" class="toggle" title="黑屏（B 或 .）">⬛ 黑屏 B</button>
-        <button id="btnLogo" class="toggle" title="标志页（L）">⛪ 标志 L</button>
-        <span class="muted small kbd-hint">空格/→ 下一页 · ← 上一页 · B 黑屏 · L 标志 · Home 第一页</span>
+        <div class="pv cur"><div class="pv-label">当前 <span id="curInfo" class="muted"></span></div><div id="pvCur" class="lp-stage pv-stage"></div></div>
+        <div class="side">
+          <div class="pv next"><div class="pv-label">下一页 <span id="nextInfo" class="muted"></span></div><div id="pvNext" class="lp-stage pv-stage"></div></div>
+          <div class="live-controls">
+            <button id="btnPrev" title="上一页（← / ↑ / PageUp）">◀ 上一页</button>
+            <button id="btnNext" class="primary big" title="下一页（空格 / → / ↓ / PageDown）">下一页 ▶</button>
+            <button id="btnBlack" class="toggle" title="黑屏（B 或 .）">⬛ 黑屏 <kbd>B</kbd></button>
+            <button id="btnLogo" class="toggle" title="标志页（L）">⛪ 标志 <kbd>L</kbd></button>
+          </div>
+          <div class="kbd-hint muted small"><kbd>空格</kbd>/<kbd>→</kbd> 下一页　<kbd>←</kbd> 上一页　<kbd>Home</kbd> 第一页　<kbd>B</kbd> 黑屏　<kbd>L</kbd> 标志　<kbd>Esc</kbd> 恢复</div>
+        </div>
       </div>
       <div id="slideGrid" class="slide-grid"></div>
     </div>
@@ -50,7 +52,7 @@
 
 <!-- 歌曲库 -->
 <section id="tab-songs" class="tab">
-  <div class="two-col">
+  <div class="two-col songs-col">
     <aside class="panel">
       <div class="row"><input id="songSearch" type="search" placeholder="🔍 搜索歌名或歌词…"><button id="btnNewSong" class="primary">＋ 新歌</button></div>
       <div id="tagFilter" class="chips"></div>
@@ -81,9 +83,11 @@
         <span id="songMsg" class="muted small"></span>
       </div>
       <div class="muted small" id="songUsage"></div>
+    </div>
+    <aside class="panel song-pv">
       <div id="songWarn" class="warn small"></div>
       <div id="songPreview" class="slide-grid small-grid"></div>
-    </div>
+    </aside>
   </div>
 </section>
 

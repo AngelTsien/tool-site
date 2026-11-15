@@ -6,7 +6,7 @@
 - **推荐**：放到 GitHub Pages（把整个文件夹上传到仓库），用 `https://你的用户名.github.io/…/lyrics-projector/` 打开。
 - 本机临时用：在文件夹里运行 `python3 -m http.server`，再打开 `http://localhost:8000`。
 - 直接双击 `index.html` 也能投影，但**「照片识别歌词」不能用**（浏览器不允许本地文件运行识别程序）。
-- 建议用 Chrome / Edge；Safari 也可以。
+- 为电脑设计（1366–1920 宽屏，键盘鼠标操作），不适配手机。建议用 Chrome / Edge；Safari 也可以。
 
 ## 主日当天 3 步
 1. 「📋 歌单」里选好今天的歌单 → 点 **▶ 开始投影**。
